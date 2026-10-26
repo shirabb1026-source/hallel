@@ -44,7 +44,15 @@ function hallel_about_value( $key ) {
  return '';
 }
 add_action( 'add_meta_boxes_page', function( $post ) {
- if ( 'about' === $post->post_name ) add_meta_box( 'hallel-about-content', 'תוכן עמוד אודותינו', 'hallel_about_metabox', 'page', 'normal', 'high' );
+ $show = 'about' === $post->post_name;
+ if ( ! $show && function_exists( 'pll_get_post_translations' ) ) {
+  $about_page = get_page_by_path( 'about' );
+  if ( $about_page ) {
+   $translations = array_map( 'intval', pll_get_post_translations( $about_page->ID ) );
+   $show = in_array( (int) $post->ID, $translations, true );
+  }
+ }
+ if ( $show ) add_meta_box( 'hallel-about-content', 'תוכן עמוד אודותינו', 'hallel_about_metabox', 'page', 'normal', 'high' );
 });
 function hallel_about_metabox( $post ) {
  wp_nonce_field( 'hallel_save_about', 'hallel_about_nonce' );

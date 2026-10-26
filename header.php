@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html <?php language_attributes(); ?> dir="rtl">
+<html <?php language_attributes(); ?> dir="<?php echo function_exists( 'pll_current_language' ) && 'en' === pll_current_language() ? 'ltr' : 'rtl'; ?>">
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,6 +26,14 @@
 		<a class="site-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<img src="<?php echo esc_url( hallel_content_url( 'header_logo' ) ); ?>" alt="<?php bloginfo( 'name' ); ?>">
 		</a>
+
+		<?php if ( function_exists( 'pll_the_languages' ) ) : $hallel_langs = pll_the_languages( array( 'raw' => 1, 'hide_if_empty' => 0 ) ); if ( $hallel_langs ) : ?>
+		<div class="site-lang-switch">
+			<?php foreach ( $hallel_langs as $hallel_lang ) : ?>
+			<a href="<?php echo esc_url( $hallel_lang['url'] ); ?>" <?php echo $hallel_lang['current_lang'] ? 'class="is-current" aria-current="true"' : ''; ?> lang="<?php echo esc_attr( $hallel_lang['locale'] ); ?>"><?php echo esc_html( strtoupper( $hallel_lang['slug'] ) ); ?></a>
+			<?php endforeach; ?>
+		</div>
+		<?php endif; endif; ?>
 
 		<nav class="site-nav" aria-label="תפריט ראשי">
 			<?php

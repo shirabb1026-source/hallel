@@ -80,12 +80,20 @@ function hallel_global_groups() {
 
 function hallel_home_page_id() {
 	$id = (int) get_option( 'page_on_front' );
-	if ( $id ) { return $id; }
-	foreach ( array( 'home', 'עמוד-הבית' ) as $slug ) {
-		$page = get_page_by_path( $slug );
-		if ( $page ) { return (int) $page->ID; }
+	if ( ! $id ) {
+		foreach ( array( 'home', 'עמוד-הבית' ) as $slug ) {
+			$page = get_page_by_path( $slug );
+			if ( $page ) { $id = (int) $page->ID; break; }
+		}
 	}
-	return 0;
+	if ( $id && function_exists( 'pll_get_post' ) && function_exists( 'pll_current_language' ) ) {
+		$lang = pll_current_language();
+		if ( $lang ) {
+			$translated = pll_get_post( $id, $lang );
+			if ( $translated ) { $id = (int) $translated; }
+		}
+	}
+	return $id;
 }
 
 function hallel_field_default( $key ) {
@@ -110,6 +118,17 @@ function hallel_content_value( $key ) {
 			$value = get_post_meta( $home_id, '_hallel_' . $key, true );
 			if ( '' !== $value ) { return $value; }
 		}
+	} elseif ( function_exists( 'pll_current_language' ) ) {
+		// Global header/footer fields aren't tied to a post, so translations
+		// are kept as "{key}_{lang}" entries in the same option, falling
+		// back to the Hebrew value (and then the hardcoded default) until
+		// a translation has been entered.
+		$lang = pll_current_language();
+		$default_lang = function_exists( 'pll_default_language' ) ? pll_default_language() : '';
+		if ( $lang && $lang !== $default_lang ) {
+			$lang_key = $key . '_' . $lang;
+			if ( isset( $options[ $lang_key ] ) && '' !== $options[ $lang_key ] ) { return $options[ $lang_key ]; }
+		}
 	}
 	if ( isset( $options[ $key ] ) && '' !== $options[ $key ] ) { return $options[ $key ]; }
 	return hallel_field_default( $key );
@@ -122,14 +141,22 @@ function hallel_content_url( $key ) {
 
 function hallel_content_sanitize( $input ) {
 	$output = array();
-	foreach ( hallel_global_groups() as $group ) foreach ( $group['fields'] as $key => $field ) {
-		$value = isset( $input[ $key ] ) ? wp_unslash( $input[ $key ] ) : '';
-		$output[ $key ] = in_array( $field[1], array( 'url', 'media' ), true ) ? esc_url_raw( $value ) : wp_kses_post( $value );
+	$field_types = array();
+	foreach ( hallel_global_groups() as $group ) foreach ( $group['fields'] as $key => $field ) { $field_types[ $key ] = $field[1]; }
+	$languages = function_exists( 'pll_languages_list' ) ? pll_languages_list() : array();
+	foreach ( $field_types as $key => $type ) {
+		$keys = array( $key );
+		foreach ( $languages as $lang_code ) { $keys[] = $key . '_' . $lang_code; }
+		foreach ( array_unique( $keys ) as $k ) {
+			if ( ! isset( $input[ $k ] ) ) { continue; }
+			$value = wp_unslash( $input[ $k ] );
+			$output[ $k ] = in_array( $type, array( 'url', 'media' ), true ) ? esc_url_raw( $value ) : wp_kses_post( $value );
+		}
 	}
 	return $output;
 }
 
-function hallel_render_fields( $groups, $values, $name_prefix ) {
+function hallel_render_fields( $groups, $values, $name_prefix, $lang_suffix = '' ) {
 	$section_index = 0;
 	echo '<div class="hallel-fields-ui">';
 	foreach ( $groups as $group_key => $group ) :
@@ -139,18 +166,20 @@ function hallel_render_fields( $groups, $values, $name_prefix ) {
 			<summary><span class="hallel-section-title"><?php echo esc_html( $group['label'] ); ?></span><span class="hallel-section-count"><?php echo esc_html( $field_count ); ?> שדות</span><span class="hallel-chevron" aria-hidden="true"></span></summary>
 			<div class="hallel-fields-grid">
 			<?php foreach ( $group['fields'] as $key => $field ) :
-				$value = isset( $values[$key] ) && '' !== $values[$key] ? $values[$key] : $field[2];
+				$field_key = $lang_suffix ? $key . '_' . $lang_suffix : $key;
+				$value = isset( $values[$field_key] ) && '' !== $values[$field_key] ? $values[$field_key] : ( $lang_suffix ? '' : $field[2] );
 				$preview = 0 === strpos( $value, 'assets/' ) ? get_stylesheet_directory_uri() . '/' . $value : $value;
-				$is_video = 'media' === $field[1] && preg_match( '/\.(mp4|webm|mov)(\?.*)?$/i', $preview ); ?>
+				$is_video = 'media' === $field[1] && preg_match( '/\.(mp4|webm|mov)(\?.*)?$/i', $preview );
+				$field_label = $field[0] . ( $lang_suffix ? ' (English)' : '' ); ?>
 				<div class="hallel-field hallel-field--<?php echo esc_attr( $field[1] ); ?>">
-					<label for="<?php echo esc_attr($key); ?>"><?php echo esc_html($field[0]); ?></label>
+					<label for="<?php echo esc_attr($field_key); ?>"><?php echo esc_html($field_label); ?></label>
 					<?php if ( 'textarea' === $field[1] ) : ?>
-						<textarea rows="4" id="<?php echo esc_attr($key); ?>" name="<?php echo esc_attr($name_prefix); ?>[<?php echo esc_attr($key); ?>]"><?php echo esc_textarea($value); ?></textarea>
+						<textarea <?php echo $lang_suffix ? 'dir="ltr" placeholder="עדיין בעברית: ' . esc_attr( wp_strip_all_tags( $values[$key] ?? $field[2] ) ) . '"' : ''; ?> rows="4" id="<?php echo esc_attr($field_key); ?>" name="<?php echo esc_attr($name_prefix); ?>[<?php echo esc_attr($field_key); ?>]"><?php echo esc_textarea($value); ?></textarea>
 					<?php else : ?>
-						<div class="hallel-input-row"><input class="hallel-<?php echo esc_attr($field[1]); ?>" type="text" id="<?php echo esc_attr($key); ?>" name="<?php echo esc_attr($name_prefix); ?>[<?php echo esc_attr($key); ?>]" value="<?php echo esc_attr($value); ?>">
-						<?php if ( 'media' === $field[1] ) : ?><button type="button" class="button button-secondary hallel-media-button" data-target="<?php echo esc_attr($key); ?>">בחירת קובץ</button><?php endif; ?></div>
+						<div class="hallel-input-row"><input <?php echo ( $lang_suffix && 'media' !== $field[1] ) ? 'dir="ltr"' : ''; ?> class="hallel-<?php echo esc_attr($field[1]); ?>" type="text" id="<?php echo esc_attr($field_key); ?>" name="<?php echo esc_attr($name_prefix); ?>[<?php echo esc_attr($field_key); ?>]" value="<?php echo esc_attr($value); ?>">
+						<?php if ( 'media' === $field[1] ) : ?><button type="button" class="button button-secondary hallel-media-button" data-target="<?php echo esc_attr($field_key); ?>">בחירת קובץ</button><?php endif; ?></div>
 					<?php endif; ?>
-					<?php if ( 'media' === $field[1] ) : ?><div class="hallel-media-preview" data-preview-for="<?php echo esc_attr($key); ?>"><?php if ( $is_video ) : ?><span class="dashicons dashicons-video-alt3"></span><span>קובץ וידאו נבחר</span><?php elseif ( $preview ) : ?><img src="<?php echo esc_url($preview); ?>" alt=""><?php endif; ?></div><?php endif; ?>
+					<?php if ( 'media' === $field[1] ) : ?><div class="hallel-media-preview" data-preview-for="<?php echo esc_attr($field_key); ?>"><?php if ( $is_video ) : ?><span class="dashicons dashicons-video-alt3"></span><span>קובץ וידאו נבחר</span><?php elseif ( $preview ) : ?><img src="<?php echo esc_url($preview); ?>" alt=""><?php endif; ?></div><?php endif; ?>
 				</div>
 			<?php endforeach; ?>
 			</div>
@@ -192,17 +221,48 @@ add_action( 'admin_enqueue_scripts', function( $hook ){
 
 function hallel_content_screen() {
 	if ( ! current_user_can( 'edit_theme_options' ) ) return;
-	$values = get_option( 'hallel_content', array() ); ?>
+	$values = get_option( 'hallel_content', array() );
+	$languages = function_exists( 'pll_languages_list' ) ? array_diff( pll_languages_list(), array( function_exists( 'pll_default_language' ) ? pll_default_language() : '' ) ) : array(); ?>
 	<div class="wrap" dir="rtl"><h1>הדר ופוטר</h1><p>כאן ניתן לערוך את האזורים הקבועים שמופיעים בכל האתר.</p>
 	<form method="post" action="options.php"><?php settings_fields( 'hallel_content_group' );
-	hallel_render_fields( hallel_global_groups(), $values, 'hallel_content' );
+	if ( $languages ) { ?>
+		<h2 class="nav-tab-wrapper hallel-lang-tabs">
+			<a href="#hallel-tab-default" class="nav-tab nav-tab-active" data-hallel-tab="default">עברית</a>
+			<?php foreach ( $languages as $lang_code ) : ?>
+			<a href="#hallel-tab-<?php echo esc_attr( $lang_code ); ?>" class="nav-tab" data-hallel-tab="<?php echo esc_attr( $lang_code ); ?>"><?php echo 'en' === $lang_code ? 'English' : esc_html( $lang_code ); ?></a>
+			<?php endforeach; ?>
+		</h2>
+		<div id="hallel-tab-default" class="hallel-lang-panel">
+			<?php hallel_render_fields( hallel_global_groups(), $values, 'hallel_content' ); ?>
+		</div>
+		<?php foreach ( $languages as $lang_code ) : ?>
+		<div id="hallel-tab-<?php echo esc_attr( $lang_code ); ?>" class="hallel-lang-panel" style="display:none">
+			<p class="hallel-home-help">שדה שנשאר ריק יוצג באתר בעברית, עד שתוזן לו תרגום כאן.</p>
+			<?php hallel_render_fields( hallel_global_groups(), $values, 'hallel_content', $lang_code ); ?>
+		</div>
+		<?php endforeach; ?>
+		<script>document.addEventListener('click',function(e){var t=e.target.closest('.hallel-lang-tabs .nav-tab');if(!t)return;e.preventDefault();document.querySelectorAll('.hallel-lang-tabs .nav-tab').forEach(function(x){x.classList.remove('nav-tab-active')});t.classList.add('nav-tab-active');document.querySelectorAll('.hallel-lang-panel').forEach(function(p){p.style.display='none'});var panel=document.getElementById('hallel-tab-'+t.dataset.hallelTab);if(panel)panel.style.display='';});</script>
+	<?php } else {
+		hallel_render_fields( hallel_global_groups(), $values, 'hallel_content' );
+	}
 	submit_button( 'שמירת הדר ופוטר' ); ?></form></div>
 	<?php hallel_fields_assets();
 }
 
 add_action( 'add_meta_boxes_page', function( $post ) {
-	$home_id = hallel_home_page_id();
-	if ( ( $home_id && (int) $post->ID === $home_id ) || in_array( $post->post_name, array( 'home', 'עמוד-הבית' ), true ) ) {
+	$home_id = (int) get_option( 'page_on_front' );
+	if ( ! $home_id ) {
+		foreach ( array( 'home', 'עמוד-הבית' ) as $slug ) {
+			$page = get_page_by_path( $slug );
+			if ( $page ) { $home_id = (int) $page->ID; break; }
+		}
+	}
+	$is_home = ( $home_id && (int) $post->ID === $home_id ) || in_array( $post->post_name, array( 'home', 'עמוד-הבית' ), true );
+	if ( ! $is_home && $home_id && function_exists( 'pll_get_post_translations' ) ) {
+		$translations = array_map( 'intval', pll_get_post_translations( $home_id ) );
+		$is_home = in_array( (int) $post->ID, $translations, true );
+	}
+	if ( $is_home ) {
 		add_meta_box( 'hallel-home-content', 'תוכן עמוד הבית', 'hallel_home_metabox', 'page', 'normal', 'high' );
 	}
 } );
