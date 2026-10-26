@@ -1,5 +1,6 @@
 <?php
 /**
+ * Template Name: אודותינו
  * About page — editorial inner-page layout.
  */
 get_header();
