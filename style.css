@@ -123,6 +123,11 @@ h1,h2,h3,p{ margin:0; }
 .site-donate svg{ width:18px; height:8px; flex-shrink:0; }
 .site-logo{ justify-self: center; }
 .site-logo img{ height: 62px; width: auto; }
+.site-nav{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
 .site-nav ul{
   display:flex;
   flex-direction: row-reverse; /* first item (home) renders at the right edge, matching RTL reading order, without relying on bidi direction flips */
@@ -2686,7 +2691,7 @@ body.hallel-inner-page .inner-closing>p{
 }
 
 /* ===== Language switcher (Polylang) ===== */
-.site-lang-switch{ display:flex; align-items:center; gap:6px; margin-inline-start:12px; font:700 12px/1 var(--font-body); }
-.site-lang-switch a{ padding:6px 10px; border-radius:20px; border:1px solid rgba(1,41,75,.25); color:var(--navy); opacity:.6; transition:.15s; }
-.site-lang-switch a:hover{ opacity:1; border-color:var(--navy); }
-.site-lang-switch a.is-current{ opacity:1; background:var(--navy); color:#fff; border-color:var(--navy); }
+.site-lang-switch{ display:flex; align-items:center; gap:6px; font:700 12px/1 var(--font-body); }
+.site-lang-switch a{ padding:6px 10px; border-radius:20px; border:1px solid rgba(255,255,255,.4); color:var(--white); opacity:.75; transition:.15s; }
+.site-lang-switch a:hover{ opacity:1; border-color:var(--cyan); color:var(--cyan); }
+.site-lang-switch a.is-current{ opacity:1; background:var(--cyan); color:var(--navy); border-color:var(--cyan); }

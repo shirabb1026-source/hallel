@@ -27,15 +27,16 @@
 			<img src="<?php echo esc_url( hallel_content_url( 'header_logo' ) ); ?>" alt="<?php bloginfo( 'name' ); ?>">
 		</a>
 
-		<?php if ( function_exists( 'pll_the_languages' ) ) : $hallel_langs = pll_the_languages( array( 'raw' => 1, 'hide_if_empty' => 0 ) ); if ( $hallel_langs ) : ?>
-		<div class="site-lang-switch">
-			<?php foreach ( $hallel_langs as $hallel_lang ) : ?>
-			<a href="<?php echo esc_url( $hallel_lang['url'] ); ?>" <?php echo $hallel_lang['current_lang'] ? 'class="is-current" aria-current="true"' : ''; ?> lang="<?php echo esc_attr( $hallel_lang['locale'] ); ?>"><?php echo esc_html( strtoupper( $hallel_lang['slug'] ) ); ?></a>
-			<?php endforeach; ?>
-		</div>
-		<?php endif; endif; ?>
-
 		<nav class="site-nav" aria-label="תפריט ראשי">
+
+			<?php if ( function_exists( 'pll_the_languages' ) ) : $hallel_langs = pll_the_languages( array( 'raw' => 1, 'hide_if_empty' => 0 ) ); if ( $hallel_langs ) : ?>
+			<div class="site-lang-switch">
+				<?php foreach ( $hallel_langs as $hallel_lang ) : ?>
+				<a href="<?php echo esc_url( $hallel_lang['url'] ); ?>" <?php echo $hallel_lang['current_lang'] ? 'class="is-current" aria-current="true"' : ''; ?> lang="<?php echo esc_attr( $hallel_lang['locale'] ); ?>"><?php echo esc_html( strtoupper( $hallel_lang['slug'] ) ); ?></a>
+				<?php endforeach; ?>
+			</div>
+			<?php endif; endif; ?>
+
 			<?php
 			if ( has_nav_menu( 'primary' ) ) {
 				wp_nav_menu( array(
