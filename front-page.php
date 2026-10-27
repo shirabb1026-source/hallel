@@ -152,7 +152,8 @@ get_header();
 		while ( $hallel_home_projects_q->have_posts() ) : $hallel_home_projects_q->the_post();
 			$hallel_home_project_i++;
 			$hallel_video = hallel_project_url( get_the_ID(), 'teaser_video' );
-			$hallel_poster = get_the_post_thumbnail_url( get_the_ID(), 'large' );
+			$hallel_poster = hallel_project_url( get_the_ID(), 'teaser_image' );
+			if ( ! $hallel_poster && has_post_thumbnail() ) { $hallel_poster = get_the_post_thumbnail_url( get_the_ID(), 'large' ); }
 			$hallel_lead = hallel_project_value( get_the_ID(), 'teaser_lead' );
 			$hallel_link_text = hallel_project_value( get_the_ID(), 'teaser_link_text' );
 			$hallel_stamp = strtoupper( get_post_field( 'post_name' ) ) . ' &middot; ' . get_the_date( 'Y' );

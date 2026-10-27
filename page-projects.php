@@ -36,7 +36,8 @@ get_header();
 			$hallel_project_index++;
 			$hallel_number = sprintf( '%02d', $hallel_project_index );
 			$hallel_reverse = 0 === $hallel_project_index % 2;
-			$hallel_img = get_the_post_thumbnail_url( get_the_ID(), 'large' );
+			$hallel_img = hallel_project_url( get_the_ID(), 'teaser_image' );
+			if ( ! $hallel_img && has_post_thumbnail() ) { $hallel_img = get_the_post_thumbnail_url( get_the_ID(), 'large' ); }
 			$hallel_kicker = hallel_project_value( get_the_ID(), 'teaser_kicker' );
 			$hallel_link_text = hallel_project_value( get_the_ID(), 'teaser_link_text' );
 		?>

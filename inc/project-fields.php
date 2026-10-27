@@ -30,6 +30,7 @@ function hallel_project_schema() { return array(
 	'teaser' => array( 'label' => '2 · כרטיס תצוגה (ארכיון ועמוד הבית)', 'fields' => array(
 		'teaser_kicker' => array( 'כרטיס — כותרת עליונה', 'text', '' ),
 		'teaser_lead' => array( 'כרטיס — משפט פתיחה (מודגש)', 'text', '' ),
+		'teaser_image' => array( 'תמונה ראשית (הירו + כרטיס)', 'media', '' ),
 		'teaser_video' => array( 'כרטיס — וידאו רקע (אופציונלי)', 'media', '' ),
 		'teaser_link_text' => array( 'כרטיס — טקסט הכפתור', 'text', 'לפרויקט' ),
 	) ),

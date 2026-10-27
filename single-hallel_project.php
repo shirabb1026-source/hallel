@@ -11,12 +11,14 @@ $hallel_has_photo1 = '' !== hallel_project_value( $hallel_pid, 'story1_photo' );
 $hallel_has_story2 = '' !== hallel_project_value( $hallel_pid, 'story2_title_1' ) || '' !== hallel_project_value( $hallel_pid, 'story2_text' );
 $hallel_has_goals  = '' !== hallel_project_value( $hallel_pid, 'goals_title_1' );
 $hallel_has_process = '' !== hallel_project_value( $hallel_pid, 'process_title_1' );
+$hallel_hero_img = hallel_project_url( $hallel_pid, 'teaser_image' );
+if ( ! $hallel_hero_img && has_post_thumbnail() ) { $hallel_hero_img = get_the_post_thumbnail_url( $hallel_pid, 'full' ); }
 ?>
 
 <main class="inner-page project-detail">
 	<section class="project-detail-hero site-banner-diagonal">
-		<?php if ( has_post_thumbnail() ) : ?>
-		<img src="<?php echo esc_url( get_the_post_thumbnail_url( $hallel_pid, 'full' ) ); ?>" alt="">
+		<?php if ( $hallel_hero_img ) : ?>
+		<img src="<?php echo esc_url( $hallel_hero_img ); ?>" alt="">
 		<?php endif; ?>
 		<div class="project-detail-hero__shade" aria-hidden="true"></div>
 		<div class="project-detail-hero__copy">
