@@ -3,7 +3,7 @@ Theme Name: Hallel
 Theme URI: https://hallel.local
 Author: Keren Hallel
 Description: ערכת עיצוב מותאמת אישית לקרן הלל, בהשראת מסמך העיצוב ב-Figma.
-Version: 0.4.3
+Version: 0.4.4
 Text Domain: hallel
 GitHub Theme URI: shirabb1026-source/hallel
 Primary Branch: main
@@ -2810,6 +2810,10 @@ body.hallel-inner-page .inner-closing>p{
   /* the skewed filmstrip under the story section is 8% wider than the
      screen; clip it so phones can't scroll sideways into a white strip */
   .story{overflow-x:clip;}
+  /* Home "our projects" cards: taller, with room above the stamp/frame corners */
+  .project-card{min-height:620px;padding:90px 30px 78px;}
+  .project-card__title{margin-bottom:18px;}
+  .project-card__text{margin-bottom:28px;}
   /* Same diagonal cut + film strip as desktop: the navy ends on a slope
      (2.38deg, lower on the right) and the strip runs just under that edge. */
   .story::before{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(4.16vw + 1px);background:#f7f9fa;clip-path:polygon(0 0,100% 100%,0 100%);z-index:5;pointer-events:none;}
