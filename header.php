@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html <?php language_attributes(); ?> dir="<?php echo function_exists( 'pll_current_language' ) && 'en' === pll_current_language() ? 'ltr' : 'rtl'; ?>">
+<html <?php language_attributes(); ?> dir="rtl">
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,19 +23,33 @@
 			</svg>
 		</a>
 
+		<?php
+		if ( function_exists( 'pll_the_languages' ) ) :
+			$hallel_langs = pll_the_languages( array( 'raw' => 1, 'hide_if_empty' => 0 ) );
+			if ( $hallel_langs ) :
+				$hallel_lang_list    = array_values( $hallel_langs );
+				$hallel_current_pos  = 0;
+				foreach ( $hallel_lang_list as $hallel_i => $hallel_lang ) {
+					if ( ! empty( $hallel_lang['current_lang'] ) ) {
+						$hallel_current_pos = $hallel_i;
+					}
+				}
+				?>
+				<div class="site-lang-toggle pos-<?php echo esc_attr( $hallel_current_pos ); ?>" role="group" aria-label="שפה / Language">
+					<span class="site-lang-toggle__thumb" aria-hidden="true"></span>
+					<?php foreach ( $hallel_lang_list as $hallel_lang ) : ?>
+					<a class="site-lang-toggle__opt<?php echo $hallel_lang['current_lang'] ? ' is-current' : ''; ?>" href="<?php echo esc_url( $hallel_lang['url'] ); ?>" <?php echo $hallel_lang['current_lang'] ? 'aria-current="true"' : ''; ?> lang="<?php echo esc_attr( $hallel_lang['locale'] ); ?>"><?php echo esc_html( strtoupper( $hallel_lang['slug'] ) ); ?></a>
+					<?php endforeach; ?>
+				</div>
+			<?php endif;
+		endif;
+		?>
+
 		<a class="site-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<img src="<?php echo esc_url( hallel_content_url( 'header_logo' ) ); ?>" alt="<?php bloginfo( 'name' ); ?>">
 		</a>
 
 		<nav class="site-nav" aria-label="תפריט ראשי">
-
-			<?php if ( function_exists( 'pll_the_languages' ) ) : $hallel_langs = pll_the_languages( array( 'raw' => 1, 'hide_if_empty' => 0 ) ); if ( $hallel_langs ) : ?>
-			<div class="site-lang-switch">
-				<?php foreach ( $hallel_langs as $hallel_lang ) : ?>
-				<a href="<?php echo esc_url( $hallel_lang['url'] ); ?>" <?php echo $hallel_lang['current_lang'] ? 'class="is-current" aria-current="true"' : ''; ?> lang="<?php echo esc_attr( $hallel_lang['locale'] ); ?>"><?php echo esc_html( strtoupper( $hallel_lang['slug'] ) ); ?></a>
-				<?php endforeach; ?>
-			</div>
-			<?php endif; endif; ?>
 
 			<?php
 			if ( has_nav_menu( 'primary' ) ) {
