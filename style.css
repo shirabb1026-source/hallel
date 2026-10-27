@@ -3,7 +3,7 @@ Theme Name: Hallel
 Theme URI: https://hallel.local
 Author: Keren Hallel
 Description: ערכת עיצוב מותאמת אישית לקרן הלל, בהשראת מסמך העיצוב ב-Figma.
-Version: 0.3.9
+Version: 0.4.0
 Text Domain: hallel
 GitHub Theme URI: shirabb1026-source/hallel
 Primary Branch: main
@@ -2736,12 +2736,16 @@ body.hallel-inner-page .inner-closing>p{
 .nav-toggle{display:none;}
 @media (max-width:900px){
   body .site-header{padding:14px 0;}
-  body .site-header__inner{grid-template-columns:auto auto 1fr auto;gap:10px;padding-inline:16px;}
+  /* logo dead-centre; donate with the language switch under it on the left; menu on the right */
+  body .site-header__inner{grid-template-columns:1fr auto 1fr;grid-template-rows:auto auto;column-gap:10px;row-gap:7px;padding-inline:16px;}
+  body .site-donate{grid-column:1;grid-row:1;justify-self:start;}
+  body .site-lang-toggle{grid-column:1;grid-row:2;justify-self:start;}
+  body .site-logo{grid-column:2;grid-row:1 / span 2;align-self:center;}
   body .site-donate{font-size:15px;padding:7px 12px;gap:6px;}
   body .site-donate svg{width:14px;}
   body .site-logo{justify-self:center;}
   body .site-logo img{height:46px;width:auto;}
-  .nav-toggle{display:flex;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;padding:10px;margin:0;border:0;background:transparent;cursor:pointer;position:relative;z-index:3;grid-column:4;}
+  .nav-toggle{display:flex;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;padding:10px;margin:0;border:0;background:transparent;cursor:pointer;position:relative;z-index:3;grid-column:3;grid-row:1 / span 2;justify-self:end;align-self:center;}
   .nav-toggle span{display:block;height:2px;width:100%;background:#fff;border-radius:2px;transition:transform .25s ease,opacity .2s ease;}
   body.nav-open .nav-toggle span:nth-child(1){transform:translateY(7px) rotate(45deg);}
   body.nav-open .nav-toggle span:nth-child(2){opacity:0;}
