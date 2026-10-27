@@ -24,10 +24,26 @@ get_header();
 	</section>
 
 	<section class="projects-list" aria-label="רשימת פרויקטים">
-		<article class="project-teaser project-teaser--featured">
-			<a class="project-teaser__image" href="<?php echo esc_url( home_url( '/projects/kamim-mehadash/' ) ); ?>" aria-label="לפרויקט קמים מחדש">
-				<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/images/project-1-bg.jpg' ); ?>" alt="">
-				<span class="project-teaser__number">01</span>
+		<?php
+		$hallel_projects_q = new WP_Query( array(
+			'post_type'      => 'hallel_project',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'orderby'        => array( 'menu_order' => 'ASC', 'date' => 'ASC' ),
+		) );
+		$hallel_project_index = 0;
+		while ( $hallel_projects_q->have_posts() ) : $hallel_projects_q->the_post();
+			$hallel_project_index++;
+			$hallel_number = sprintf( '%02d', $hallel_project_index );
+			$hallel_reverse = 0 === $hallel_project_index % 2;
+			$hallel_img = get_the_post_thumbnail_url( get_the_ID(), 'large' );
+			$hallel_kicker = hallel_project_value( get_the_ID(), 'teaser_kicker' );
+			$hallel_link_text = hallel_project_value( get_the_ID(), 'teaser_link_text' );
+		?>
+		<article class="project-teaser<?php echo $hallel_reverse ? ' project-teaser--reverse' : ''; ?>">
+			<a class="project-teaser__image" href="<?php the_permalink(); ?>" aria-label="<?php echo esc_attr( sprintf( 'לפרויקט %s', get_the_title() ) ); ?>">
+				<?php if ( $hallel_img ) : ?><img src="<?php echo esc_url( $hallel_img ); ?>" alt=""><?php endif; ?>
+				<span class="project-teaser__number"><?php echo esc_html( $hallel_number ); ?></span>
 <div class="project-card__frame" aria-hidden="true">
 					<span class="tl-v"></span><span class="tl-h"></span>
 					<span class="tr-v"></span><span class="tr-h"></span>
@@ -36,37 +52,16 @@ get_header();
 				</div>
 				<span class="project-card__scene-label">SCENE 02 &middot; TAKE 03</span>
 				<span class="project-card__rec"><span class="project-card__rec-text">REC</span><span class="project-card__rec-dot" aria-hidden="true"></span></span>
-				
+
 			</a>
 			<div class="project-teaser__copy">
-				<p class="inner-kicker">עיבוד · יצירה · שיקום</p>
-				<h2>קמים מחדש</h2>
-				<p>סיפורי פציעה, שיקום ותקווה של חיילים שנפצעו במלחמת ״חרבות ברזל״. מיזם סרטים קצרים בקולם האישי, עם פיילוט מתוכנן של פצועי הקרבות בכפר עזה.</p>
-				<a class="inner-button" href="<?php echo esc_url( home_url( '/projects/kamim-mehadash/' ) ); ?>">לפרויקט <span aria-hidden="true">←</span></a>
+				<?php if ( $hallel_kicker ) : ?><p class="inner-kicker"><?php echo esc_html( $hallel_kicker ); ?></p><?php endif; ?>
+				<h2><?php the_title(); ?></h2>
+				<p><?php echo esc_html( get_the_excerpt() ); ?></p>
+				<a class="inner-button" href="<?php the_permalink(); ?>"><?php echo esc_html( $hallel_link_text ? $hallel_link_text : 'לפרויקט' ); ?> <span aria-hidden="true">←</span></a>
 			</div>
 		</article>
-
-		<article class="project-teaser project-teaser--reverse">
-			<div class="project-teaser__image">
-				<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/images/project-2-bg.jpg' ); ?>" alt="">
-				<span class="project-teaser__number">02</span>
-<div class="project-card__frame" aria-hidden="true">
-					<span class="tl-v"></span><span class="tl-h"></span>
-					<span class="tr-v"></span><span class="tr-h"></span>
-					<span class="bl-v"></span><span class="bl-h"></span>
-					<span class="br-v"></span><span class="br-h"></span>
-				</div>
-				<span class="project-card__scene-label">SCENE 02 &middot; TAKE 03</span>
-				<span class="project-card__rec"><span class="project-card__rec-text">REC</span><span class="project-card__rec-dot" aria-hidden="true"></span></span>
-				
-			</div>
-			<div class="project-teaser__copy">
-				<p class="inner-kicker">ליווי · קולנוע · הדור הבא</p>
-				<h2>ליווי פרחי יצירה</h2>
-				<p>סטודנטים לקולנוע מלווים תלמידי מגמות בתהליך היצירה, ונותנים להם כלים מקצועיים בדרך לסרט הגמר.</p>
-				<span class="project-teaser__soon">העמוד המלא יעלה בקרוב</span>
-			</div>
-		</article>
+		<?php endwhile; wp_reset_postdata(); ?>
 	</section>
 
 	<section class="inner-closing">

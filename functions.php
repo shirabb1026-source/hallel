@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once get_stylesheet_directory() . '/inc/content-fields.php';
 require_once get_stylesheet_directory() . '/inc/about-fields.php';
 require_once get_stylesheet_directory() . '/inc/articles.php';
+require_once get_stylesheet_directory() . '/inc/project-fields.php';
 
 function hallel_setup() {
 	add_theme_support( 'title-tag' );
@@ -38,7 +39,7 @@ function hallel_body_classes( $classes ) {
 	if ( is_page( 'about' ) ) {
 		$classes[] = 'hallel-about-page';
 	}
-	if ( is_page( array( 'projects', 'kamim-mehadash', 'contact' ) ) || is_post_type_archive('hallel_article') || is_singular('hallel_article') ) {
+	if ( is_page( array( 'projects', 'kamim-mehadash', 'contact' ) ) || is_post_type_archive('hallel_article') || is_singular('hallel_article') || is_singular('hallel_project') || is_post_type_archive('hallel_project') ) {
 		$classes[] = 'hallel-inner-page';
 	}
 	return $classes;

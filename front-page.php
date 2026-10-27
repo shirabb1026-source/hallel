@@ -141,10 +141,30 @@ get_header();
 				<p><?php echo wp_kses_post( hallel_content_value( 'projects_sub' ) ); ?></p>
 			</div>
 
-				<div class="project-card project-card--1">
-				<video class="project-card__video" autoplay muted loop playsinline preload="metadata" poster="<?php echo esc_url( hallel_content_url( 'project_1_poster' ) ); ?>" aria-hidden="true">
-					<source src="<?php echo esc_url( hallel_content_url( 'project_1_video' ) ); ?>" type="video/mp4">
+		<?php
+		$hallel_home_projects_q = new WP_Query( array(
+			'post_type'      => 'hallel_project',
+			'post_status'    => 'publish',
+			'posts_per_page' => 2,
+			'orderby'        => array( 'menu_order' => 'ASC', 'date' => 'ASC' ),
+		) );
+		$hallel_home_project_i = 0;
+		while ( $hallel_home_projects_q->have_posts() ) : $hallel_home_projects_q->the_post();
+			$hallel_home_project_i++;
+			$hallel_video = hallel_project_url( get_the_ID(), 'teaser_video' );
+			$hallel_poster = get_the_post_thumbnail_url( get_the_ID(), 'large' );
+			$hallel_lead = hallel_project_value( get_the_ID(), 'teaser_lead' );
+			$hallel_link_text = hallel_project_value( get_the_ID(), 'teaser_link_text' );
+			$hallel_stamp = strtoupper( get_post_field( 'post_name' ) ) . ' &middot; ' . get_the_date( 'Y' );
+		?>
+				<div class="project-card project-card--<?php echo esc_attr( $hallel_home_project_i ); ?>">
+				<?php if ( $hallel_video ) : ?>
+				<video class="project-card__video" autoplay muted loop playsinline preload="metadata" poster="<?php echo esc_url( $hallel_poster ); ?>" aria-hidden="true">
+					<source src="<?php echo esc_url( $hallel_video ); ?>" type="video/mp4">
 				</video>
+				<?php elseif ( $hallel_poster ) : ?>
+				<img class="project-card__video" src="<?php echo esc_url( $hallel_poster ); ?>" alt="" aria-hidden="true">
+				<?php endif; ?>
 				<div class="project-card__focus" aria-hidden="true"><span></span><span></span><span></span><span></span><b>+</b></div>
 				<div class="project-card__frame" aria-hidden="true">
 					<span class="tl-v"></span><span class="tl-h"></span>
@@ -154,41 +174,18 @@ get_header();
 				</div>
 				<span class="project-card__scene-label">SCENE 02 &middot; TAKE 03</span>
 				<span class="project-card__rec"><span class="project-card__rec-text">REC</span><span class="project-card__rec-dot" aria-hidden="true"></span></span>
-				<span class="project-card__stamp">KUMIM MEHADASH &middot; 2026</span>
+				<span class="project-card__stamp"><?php echo $hallel_stamp; ?></span>
 				<div class="project-card__body">
-					<h3 class="project-card__title"><?php echo esc_html( hallel_content_value( 'project_1_title' ) ); ?></h3>
+					<h3 class="project-card__title"><?php the_title(); ?></h3>
 					<p class="project-card__text">
-						<strong><?php echo wp_kses_post( hallel_content_value( 'project_1_lead' ) ); ?></strong>
-						<span class="project-card__description"><?php echo wp_kses_post( hallel_content_value( 'project_1_text' ) ); ?></span>
+						<?php if ( $hallel_lead ) : ?><strong><?php echo esc_html( $hallel_lead ); ?></strong><?php endif; ?>
+						<span class="project-card__description"><?php echo esc_html( get_the_excerpt() ); ?></span>
 					</p>
-					<a href="<?php echo esc_url( hallel_content_url( 'project_1_link' ) ); ?>" class="project-card__link"><?php echo esc_html( hallel_content_value( 'project_1_link_text' ) ); ?> <span aria-hidden="true">&larr;</span></a>
+					<a href="<?php the_permalink(); ?>" class="project-card__link"><?php echo esc_html( $hallel_link_text ? $hallel_link_text : 'לפרויקט' ); ?> <span aria-hidden="true">&larr;</span></a>
 				</div>
 			</div>
 
-				<div class="project-card project-card--2">
-				<video class="project-card__video" autoplay muted loop playsinline preload="metadata" poster="<?php echo esc_url( hallel_content_url( 'project_2_poster' ) ); ?>" aria-hidden="true">
-					<source src="<?php echo esc_url( hallel_content_url( 'project_2_video' ) ); ?>" type="video/mp4">
-				</video>
-				<div class="project-card__focus" aria-hidden="true"><span></span><span></span><span></span><span></span><b>+</b></div>
-				<div class="project-card__frame" aria-hidden="true">
-					<span class="tl-v"></span><span class="tl-h"></span>
-					<span class="tr-v"></span><span class="tr-h"></span>
-					<span class="bl-v"></span><span class="bl-h"></span>
-					<span class="br-v"></span><span class="br-h"></span>
-				</div>
-				<span class="project-card__scene-label">SCENE 02 &middot; TAKE 03</span>
-				<span class="project-card__rec"><span class="project-card__rec-text">REC</span><span class="project-card__rec-dot" aria-hidden="true"></span></span>
-				<span class="project-card__stamp">chonchut &middot; 2026</span>
-				<div class="project-card__body">
-					<h3 class="project-card__title"><?php echo esc_html( hallel_content_value( 'project_2_title' ) ); ?></h3>
-					<p class="project-card__text">
-						<strong><?php echo wp_kses_post( hallel_content_value( 'project_2_lead' ) ); ?></strong>
-						<span class="project-card__description"><?php echo wp_kses_post( hallel_content_value( 'project_2_text' ) ); ?></span>
-					</p>
-					<a href="<?php echo esc_url( hallel_content_url( 'project_2_link' ) ); ?>" class="project-card__link"><?php echo esc_html( hallel_content_value( 'project_2_link_text' ) ); ?> <span aria-hidden="true">&larr;</span></a>
-				</div>
-			</div>
-
+		<?php endwhile; wp_reset_postdata(); ?>
 		</div>
 	</section>
 
