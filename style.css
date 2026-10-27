@@ -3,7 +3,7 @@ Theme Name: Hallel
 Theme URI: https://hallel.local
 Author: Keren Hallel
 Description: ערכת עיצוב מותאמת אישית לקרן הלל, בהשראת מסמך העיצוב ב-Figma.
-Version: 0.3.4
+Version: 0.3.5
 Text Domain: hallel
 GitHub Theme URI: shirabb1026-source/hallel
 Primary Branch: main
@@ -2769,7 +2769,7 @@ body.hallel-inner-page .inner-closing>p{
 }
 @media (min-width:901px) and (prefers-reduced-motion:no-preference){
   .story__wordmark{opacity:0;}
-  .story__wordmark-solid{display:block;position:absolute;left:28.854cqw;top:3.1cqw;width:42.089cqw;height:15.854cqw;z-index:1;pointer-events:none;background:rgba(255,255,255,.14);}
+  .story__wordmark-solid{display:block;position:absolute;left:28.854cqw;top:3.1cqw;width:42.089cqw;height:15.854cqw;z-index:1;pointer-events:none;background:rgba(255,255,255,.065);}
   .story__accent,
   .story__heading,
   .story__text{
@@ -2781,7 +2781,7 @@ body.hallel-inner-page .inner-closing>p{
 }
 @media (max-width:900px) and (prefers-reduced-motion:no-preference){
   .story__wordmark{opacity:0;}
-  .story__wordmark-solid{display:block;position:absolute;left:7vw;top:14%;width:86vw;aspect-ratio:809/305;z-index:1;pointer-events:none;background:rgba(255,255,255,.14);}
+  .story__wordmark-solid{display:block;position:absolute;left:7vw;top:14%;width:86vw;aspect-ratio:809/305;z-index:1;pointer-events:none;background:rgba(255,255,255,.065);}
   .story__accent{opacity:var(--story-copy-in);transform:translate(-50%,calc((1 - var(--story-copy)) * 55vh));filter:none;}
   .story__heading,
   .story__text{opacity:var(--story-copy-in);transform:translateY(calc((1 - var(--story-copy)) * 55vh));filter:none;}
