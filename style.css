@@ -3,7 +3,7 @@ Theme Name: Hallel
 Theme URI: https://hallel.local
 Author: Keren Hallel
 Description: ערכת עיצוב מותאמת אישית לקרן הלל, בהשראת מסמך העיצוב ב-Figma.
-Version: 0.4.2
+Version: 0.4.3
 Text Domain: hallel
 GitHub Theme URI: shirabb1026-source/hallel
 Primary Branch: main
@@ -2810,4 +2810,9 @@ body.hallel-inner-page .inner-closing>p{
   /* the skewed filmstrip under the story section is 8% wider than the
      screen; clip it so phones can't scroll sideways into a white strip */
   .story{overflow-x:clip;}
+  /* Same diagonal cut + film strip as desktop: the navy ends on a slope
+     (2.38deg, lower on the right) and the strip runs just under that edge. */
+  .story::before{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(4.16vw + 1px);background:#f7f9fa;clip-path:polygon(0 0,100% 100%,0 100%);z-index:5;pointer-events:none;}
+  .story::after{left:0;right:auto;width:106%;bottom:auto;top:calc(100% - 4.16vw + 5px);height:14px;transform:rotate(2.38deg);transform-origin:0 0;background:repeating-linear-gradient(105deg,var(--cyan) 0 16px,transparent 16px 28px);z-index:6;animation-name:story-filmstrip-mobile;}
 }
+@keyframes story-filmstrip-mobile{from{background-position-x:0;}to{background-position-x:-28.99px;}}

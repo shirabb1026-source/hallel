@@ -294,10 +294,22 @@
       : progress;
 
     section.style.setProperty('--init-heading', range(headingProgress, .02, .85).toFixed(4));
-    section.style.setProperty('--init-b', range(progress, .14, .30).toFixed(4));
-    section.style.setProperty('--init-d', range(progress, .34, .50).toFixed(4));
-    section.style.setProperty('--init-a', range(progress, .54, .70).toFixed(4));
-    section.style.setProperty('--init-c', range(progress, .74, .90).toFixed(4));
+    if (desktop) {
+      // desktop layout reads right-to-left: b, d, a, c
+      section.style.setProperty('--init-b', range(progress, .14, .30).toFixed(4));
+      section.style.setProperty('--init-d', range(progress, .34, .50).toFixed(4));
+      section.style.setProperty('--init-a', range(progress, .54, .70).toFixed(4));
+      section.style.setProperty('--init-c', range(progress, .74, .90).toFixed(4));
+    } else {
+      // phones stack the cards 1-2-3-4, so each one enters as it reaches the screen
+      ['a', 'b', 'c', 'd'].forEach((key) => {
+        const card = section.querySelector('.init-card--' + key);
+        if (!card) return;
+        const parent = card.offsetParent || section;
+        const top = parent.getBoundingClientRect().top + card.offsetTop; // offsetTop ignores the entry transform
+        section.style.setProperty('--init-' + key, range((innerHeight * .98 - top) / (innerHeight * .38), 0, 1).toFixed(4));
+      });
+    }
     ticking = false;
   };
 
