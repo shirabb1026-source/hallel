@@ -179,7 +179,17 @@ function hallel_render_fields( $groups, $values, $name_prefix, $lang_suffix = ''
 				$field_label = $field[0] . ( $lang_suffix ? ' (English)' : '' ); ?>
 				<div class="hallel-field hallel-field--<?php echo esc_attr( $field[1] ); ?>">
 					<label for="<?php echo esc_attr($field_key); ?>"><?php echo esc_html($field_label); ?></label>
-					<?php if ( 'textarea' === $field[1] ) : ?>
+					<?php if ( 'richtext' === $field[1] ) : ?>
+						<div class="hallel-richtext-wrap"<?php echo $lang_suffix ? ' dir="ltr"' : ''; ?>>
+						<?php wp_editor( $value, $field_key, array(
+							'textarea_name' => $name_prefix . '[' . $field_key . ']',
+							'textarea_rows' => 6,
+							'media_buttons' => false,
+							'teeny'         => true,
+							'quicktags'     => false,
+						) ); ?>
+						</div>
+					<?php elseif ( 'textarea' === $field[1] ) : ?>
 						<textarea <?php echo $lang_suffix ? 'dir="ltr" placeholder="עדיין בעברית: ' . esc_attr( wp_strip_all_tags( $values[$key] ?? $field[2] ) ) . '"' : ''; ?> rows="4" id="<?php echo esc_attr($field_key); ?>" name="<?php echo esc_attr($name_prefix); ?>[<?php echo esc_attr($field_key); ?>]"><?php echo esc_textarea($value); ?></textarea>
 					<?php else : ?>
 						<div class="hallel-input-row"><input <?php echo ( $lang_suffix && 'media' !== $field[1] ) ? 'dir="ltr"' : ''; ?> class="hallel-<?php echo esc_attr($field[1]); ?>" type="text" id="<?php echo esc_attr($field_key); ?>" name="<?php echo esc_attr($name_prefix); ?>[<?php echo esc_attr($field_key); ?>]" value="<?php echo esc_attr($value); ?>">
@@ -203,7 +213,7 @@ function hallel_fields_assets() { ?>
 	.hallel-section-title{font-size:18px;font-weight:700}.hallel-section-count{font-size:12px;background:#08c7e9;color:#062b49;border-radius:20px;padding:4px 10px;font-weight:700}
 	.hallel-chevron{margin-right:auto;width:9px;height:9px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:.2s}.hallel-fields-section[open] .hallel-chevron{transform:rotate(135deg)}
 	.hallel-fields-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 24px;padding:24px}
-	.hallel-field{min-width:0}.hallel-field--textarea,.hallel-field--media{grid-column:1/-1}.hallel-field label{display:block;font-weight:700;color:#173b56;margin:0 0 7px;font-size:14px}
+	.hallel-field{min-width:0}.hallel-field--textarea,.hallel-field--media,.hallel-field--richtext{grid-column:1/-1}.hallel-field label{display:block;font-weight:700;color:#173b56;margin:0 0 7px;font-size:14px}.hallel-richtext-wrap .wp-editor-container{border:1px solid #b8c8d3;border-radius:6px;overflow:hidden}
 	.hallel-field input,.hallel-field textarea{width:100%;max-width:none;border:1px solid #b8c8d3;border-radius:6px;padding:9px 11px;box-sizing:border-box;background:#fff;transition:.15s}
 	.hallel-field input:focus,.hallel-field textarea:focus{border-color:#08c7e9;box-shadow:0 0 0 2px rgba(8,199,233,.18);outline:0}.hallel-field textarea{min-height:92px;resize:vertical}
 	.hallel-input-row{display:flex;gap:9px;align-items:center}.hallel-input-row .button{white-space:nowrap;height:39px;display:inline-flex;align-items:center;border-color:#08aeca;color:#075071;font-weight:600}

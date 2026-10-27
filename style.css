@@ -3,7 +3,7 @@ Theme Name: Hallel
 Theme URI: https://hallel.local
 Author: Keren Hallel
 Description: ערכת עיצוב מותאמת אישית לקרן הלל, בהשראת מסמך העיצוב ב-Figma.
-Version: 0.1.9
+Version: 0.2.0
 Text Domain: hallel
 GitHub Theme URI: shirabb1026-source/hallel
 Primary Branch: main
@@ -1484,7 +1484,7 @@ body.site-intro-active{overflow:hidden;}
 @media (max-width:900px){
   .about-hero{min-height:780px;}.about-hero__image{background-position:42% center;}.about-hero__copy{right:24px;left:24px;top:48%;width:auto;}.about-hero h1{font-size:clamp(50px,15vw,82px);}.about-hero__lead{font-size:17px;}
   .about-manifesto{display:block;padding:90px 24px;}.about-manifesto__aside{margin-bottom:45px;}.about-manifesto__content{display:block;}.about-manifesto h2,.about-principles h2,.about-timeline h2{font-size:clamp(42px,12vw,64px);}.about-manifesto__text{margin-top:40px;}
-  .about-principles{padding:80px 24px;}.about-principles__heading{display:block;margin-bottom:55px;}.about-principles__heading .about-kicker{margin-top:0;}.about-principles__list article{grid-template-columns:48px 1fr;gap:18px;padding:28px 0;}.about-principles__list p{grid-column:2;}
+  .about-principles{padding:80px 24px;}.about-principles__heading{display:block;margin-bottom:55px;}.about-principles__heading .about-kicker{margin-top:0;}.about-principles__list article{grid-template-columns:48px 1fr;gap:18px;padding:28px 0;}.about-principles__list p,.about-principles__list .about-principles__text{grid-column:2;}
   .about-timeline{display:block;}.about-timeline__visual{min-height:430px;}.about-timeline__visual::after{background:linear-gradient(0deg,var(--navy-deep),transparent 55%);}.about-timeline__content{padding:70px 24px 80px;}
   .about-closing{display:block;padding:80px 24px;}.about-closing a{margin-top:48px;}.about-footer{padding:28px 24px;}
 }
