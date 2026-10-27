@@ -146,6 +146,12 @@ function hallel_content_url( $key ) {
 	return 0 === strpos( $value, 'assets/' ) ? get_stylesheet_directory_uri() . '/' . $value : $value;
 }
 
+/** Rich-text fields are saved by the WP editor without <p> tags (like post
+ *  content), so paragraphs must be restored with wpautop() when rendering. */
+function hallel_richtext( $html ) {
+	return wpautop( wp_kses_post( (string) $html ) );
+}
+
 function hallel_sanitize_media_value( $value ) {
 	$value = trim( (string) $value );
 	if ( '' === $value ) { return ''; }

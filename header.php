@@ -49,7 +49,9 @@
 			<img src="<?php echo esc_url( hallel_content_url( 'header_logo' ) ); ?>" alt="<?php bloginfo( 'name' ); ?>">
 		</a>
 
-		<nav class="site-nav" aria-label="תפריט ראשי">
+		<button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="פתיחת תפריט"><span></span><span></span><span></span></button>
+
+		<nav class="site-nav" id="site-nav" aria-label="תפריט ראשי">
 
 			<?php
 			if ( has_nav_menu( 'primary' ) ) {

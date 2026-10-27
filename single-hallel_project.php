@@ -24,7 +24,7 @@ if ( ! $hallel_hero_img && has_post_thumbnail() ) { $hallel_hero_img = get_the_p
 		<div class="project-detail-hero__copy">
 			<p class="inner-kicker"><?php echo esc_html( hallel_project_value( $hallel_pid, 'hero_kicker' ) ); ?></p>
 			<h1><?php echo esc_html( hallel_project_value( $hallel_pid, 'hero_title_1' ) ); ?><br><span><?php echo esc_html( hallel_project_value( $hallel_pid, 'hero_title_accent' ) ); ?></span></h1>
-			<?php echo wp_kses_post( hallel_project_value( $hallel_pid, 'hero_lead' ) ); ?>
+			<?php echo hallel_richtext( hallel_project_value( $hallel_pid, 'hero_lead' ) ); ?>
 		</div>
 	</section>
 <div class="site-banner-filmstrip" aria-hidden="true"></div>
@@ -33,7 +33,7 @@ if ( ! $hallel_hero_img && has_post_thumbnail() ) { $hallel_hero_img = get_the_p
 		<aside><span><?php echo esc_html( hallel_project_value( $hallel_pid, 'story1_label' ) ); ?></span><i></i></aside>
 		<div class="project-story__title"><h2><?php echo esc_html( hallel_project_value( $hallel_pid, 'story1_title_1' ) ); ?><br><span><?php echo esc_html( hallel_project_value( $hallel_pid, 'story1_title_accent' ) ); ?></span></h2></div>
 		<div class="project-story__text">
-			<?php echo wp_kses_post( hallel_project_value( $hallel_pid, 'story1_text' ) ); ?>
+			<?php echo hallel_richtext( hallel_project_value( $hallel_pid, 'story1_text' ) ); ?>
 		</div>
 		<?php if ( $hallel_has_photo1 ) : ?>
 		<figure class="project-story__photo"><img src="<?php echo esc_url( hallel_project_url( $hallel_pid, 'story1_photo' ) ); ?>" alt="" loading="lazy"></figure>
@@ -55,7 +55,7 @@ if ( ! $hallel_hero_img && has_post_thumbnail() ) { $hallel_hero_img = get_the_p
 			<article>
 				<?php if ( $hallel_icon ) : ?><div class="project-goals__icon"><img src="<?php echo esc_url( $hallel_icon ); ?>" alt="" aria-hidden="true"></div><?php endif; ?>
 				<h3><?php echo esc_html( $hallel_title ); ?></h3>
-				<?php echo wp_kses_post( hallel_project_value( $hallel_pid, "goal_{$hallel_i}_text" ) ); ?>
+				<?php echo hallel_richtext( hallel_project_value( $hallel_pid, "goal_{$hallel_i}_text" ) ); ?>
 			</article>
 			<?php endfor; ?>
 		</div>
@@ -67,7 +67,7 @@ if ( ! $hallel_hero_img && has_post_thumbnail() ) { $hallel_hero_img = get_the_p
 		<aside><span><?php echo esc_html( hallel_project_value( $hallel_pid, 'story2_label' ) ); ?></span><i></i></aside>
 		<div class="project-story__title"><h2><?php echo esc_html( hallel_project_value( $hallel_pid, 'story2_title_1' ) ); ?><br><span><?php echo esc_html( hallel_project_value( $hallel_pid, 'story2_title_accent' ) ); ?></span></h2></div>
 		<div class="project-story__text">
-			<?php echo wp_kses_post( hallel_project_value( $hallel_pid, 'story2_text' ) ); ?>
+			<?php echo hallel_richtext( hallel_project_value( $hallel_pid, 'story2_text' ) ); ?>
 		</div>
 	</section>
 	<?php endif; ?>
@@ -86,7 +86,7 @@ if ( ! $hallel_hero_img && has_post_thumbnail() ) { $hallel_hero_img = get_the_p
 			<article>
 				<span><?php echo esc_html( hallel_project_value( $hallel_pid, "step_{$hallel_i}_number" ) ); ?></span>
 				<h3><?php echo esc_html( $hallel_title ); ?></h3>
-				<?php echo wp_kses_post( hallel_project_value( $hallel_pid, "step_{$hallel_i}_text" ) ); ?>
+				<?php echo hallel_richtext( hallel_project_value( $hallel_pid, "step_{$hallel_i}_text" ) ); ?>
 			</article>
 			<?php endfor; ?>
 		</div>

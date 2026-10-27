@@ -3,7 +3,7 @@ Theme Name: Hallel
 Theme URI: https://hallel.local
 Author: Keren Hallel
 Description: ערכת עיצוב מותאמת אישית לקרן הלל, בהשראת מסמך העיצוב ב-Figma.
-Version: 0.3.2
+Version: 0.3.3
 Text Domain: hallel
 GitHub Theme URI: shirabb1026-source/hallel
 Primary Branch: main
@@ -2731,3 +2731,28 @@ body.hallel-inner-page .inner-closing>p{
 }
 .site-lang-toggle__opt:hover{ opacity:1; }
 .site-lang-toggle__opt.is-current{ opacity:1; color:var(--navy); }
+
+/* ===== Mobile header: compact bar + hamburger menu (up to 900px) ===== */
+.nav-toggle{display:none;}
+@media (max-width:900px){
+  body .site-header{padding:14px 0;}
+  body .site-header__inner{grid-template-columns:auto auto 1fr auto;gap:10px;padding-inline:16px;}
+  body .site-donate{font-size:15px;padding:7px 12px;gap:6px;}
+  body .site-donate svg{width:14px;}
+  body .site-logo{justify-self:center;}
+  body .site-logo img{height:46px;width:auto;}
+  .nav-toggle{display:flex;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;padding:10px;margin:0;border:0;background:transparent;cursor:pointer;position:relative;z-index:3;grid-column:4;}
+  .nav-toggle span{display:block;height:2px;width:100%;background:#fff;border-radius:2px;transition:transform .25s ease,opacity .2s ease;}
+  body.nav-open .nav-toggle span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  body.nav-open .nav-toggle span:nth-child(2){opacity:0;}
+  body.nav-open .nav-toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  body .site-nav{position:fixed;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;background:var(--navy-deep);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility 0s linear .25s;}
+  body.nav-open .site-nav{opacity:1;visibility:visible;transition:opacity .25s ease;}
+  body .site-nav ul{flex-direction:column;align-items:center;gap:26px;margin:0;padding:0;list-style:none;direction:rtl;}
+  body .site-nav a{font-family:var(--font-display);font-size:30px;color:#fff;}
+  body.nav-open{overflow:hidden;}
+
+  /* Projects archive: let the teaser photo fill its whole box on phones. */
+  .project-teaser__image{min-height:0;aspect-ratio:4/3;}
+  .project-teaser__image img{position:absolute;inset:0;width:100%;height:100%;}
+}
