@@ -12,7 +12,15 @@ get_header();
 
 		<div class="hero__grain" aria-hidden="true"></div>
 
-		<div class="hero__bg">
+		<?php
+		$hallel_hero_video_m  = hallel_content_url( 'hero_video_mobile' );
+		$hallel_hero_poster_m = hallel_content_url( 'hero_poster_mobile' );
+		$hallel_hero_img_only = $hallel_hero_poster_m && ! $hallel_hero_video_m;
+		?>
+		<div class="hero__bg<?php echo $hallel_hero_img_only ? ' hero__bg--mobile-image' : ''; ?>">
+			<?php if ( $hallel_hero_img_only ) : ?>
+			<img class="hero__bg-mobile" src="<?php echo esc_url( $hallel_hero_poster_m ); ?>" alt="" aria-hidden="true">
+			<?php endif; ?>
 			<video
 				autoplay
 				muted
@@ -20,11 +28,14 @@ get_header();
 				playsinline
 				preload="auto"
 				poster="<?php echo esc_url( hallel_content_url( 'hero_poster' ) ); ?>"
+				<?php if ( $hallel_hero_poster_m ) : ?>data-poster-mobile="<?php echo esc_url( $hallel_hero_poster_m ); ?>"<?php endif; ?>
 				aria-hidden="true"
 			>
+				<?php if ( $hallel_hero_video_m ) : ?><source media="(max-width: 900px)" src="<?php echo esc_url( $hallel_hero_video_m ); ?>" type="video/mp4"><?php endif; ?>
 				<source src="<?php echo esc_url( hallel_content_url( 'hero_video' ) ); ?>" type="video/mp4">
 				<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/images/hero-bg.jpg' . '?v=' . filemtime( get_stylesheet_directory() . '/assets/images/hero-bg.jpg' ) ); ?>" alt="" role="presentation">
 			</video>
+			<script>(function(){var v=document.currentScript.previousElementSibling;if(!v||!window.matchMedia||!matchMedia('(max-width: 900px)').matches)return;if(v.parentNode.classList.contains('hero__bg--mobile-image')){v.parentNode.removeChild(v);return;}if(v.getAttribute('data-poster-mobile')){v.poster=v.getAttribute('data-poster-mobile');}})();</script>
 		</div>
 
 		<div class="hero__frame" aria-hidden="true">

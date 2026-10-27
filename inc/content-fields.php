@@ -16,6 +16,7 @@ function hallel_content_schema() {
 		) ),
 		'hero' => array( 'label' => 'עמוד הבית — פתיחה', 'fields' => array(
 			'hero_video' => array( 'וידאו רקע', 'media', 'assets/videos/hero-bg.mp4' ), 'hero_poster' => array( 'תמונת וידאו', 'media', 'assets/images/hero-bg.jpg' ),
+			'hero_poster_mobile' => array( 'מובייל — תמונה לאורך (1080×1920, אופציונלי)', 'media', '' ), 'hero_video_mobile' => array( 'מובייל — וידאו לאורך (1080×1920, אופציונלי)', 'media', '' ),
 			'hero_scene' => array( 'כיתוב סצנה', 'text', 'SCENE 01 · TAKE 02' ), 'hero_rec' => array( 'כיתוב הקלטה', 'text', 'REC' ),
 			'hero_title_1' => array( 'כותרת שורה 1', 'text', 'יצירה. ציונות.' ), 'hero_title_2' => array( 'כותרת שורה 2', 'text', 'משמעות.' ),
 			'hero_text' => array( 'טקסט פתיחה', 'textarea', 'קולנוע הוא הדרך שבה אנחנו מספרים מי אנחנו, מאיפה באנו ולאן אנחנו רוצים ללכת.' ),

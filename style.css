@@ -3,7 +3,7 @@ Theme Name: Hallel
 Theme URI: https://hallel.local
 Author: Keren Hallel
 Description: ערכת עיצוב מותאמת אישית לקרן הלל, בהשראת מסמך העיצוב ב-Figma.
-Version: 0.3.5
+Version: 0.3.6
 Text Domain: hallel
 GitHub Theme URI: shirabb1026-source/hallel
 Primary Branch: main
@@ -2785,4 +2785,17 @@ body.hallel-inner-page .inner-closing>p{
   .story__accent{opacity:var(--story-copy-in);transform:translate(-50%,calc((1 - var(--story-copy)) * 55vh));filter:none;}
   .story__heading,
   .story__text{opacity:var(--story-copy-in);transform:translateY(calc((1 - var(--story-copy)) * 55vh));filter:none;}
+}
+
+/* ===== Mobile: full-screen hero, no sideways overflow ===== */
+.hero__bg-mobile{display:none;}
+@media (max-width:900px){
+  .hero{min-height:100vh;min-height:100svh;align-items:stretch;}
+  .hero__stage{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;}
+  .hero__bg video,.hero__bg img{object-position:72% 50%;}
+  .hero__bg--mobile-image .hero__bg-mobile{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;}
+  .hero__bg--mobile-image video{display:none;}
+  /* the skewed filmstrip under the story section is 8% wider than the
+     screen; clip it so phones can't scroll sideways into a white strip */
+  .story{overflow-x:clip;}
 }
