@@ -3,7 +3,7 @@ Theme Name: Hallel
 Theme URI: https://hallel.local
 Author: Keren Hallel
 Description: ערכת עיצוב מותאמת אישית לקרן הלל, בהשראת מסמך העיצוב ב-Figma.
-Version: 0.4.4
+Version: 0.4.5
 Text Domain: hallel
 GitHub Theme URI: shirabb1026-source/hallel
 Primary Branch: main
@@ -2820,3 +2820,10 @@ body.hallel-inner-page .inner-closing>p{
   .story::after{left:0;right:auto;width:106%;bottom:auto;top:calc(100% - 4.16vw + 5px);height:14px;transform:rotate(2.38deg);transform-origin:0 0;background:repeating-linear-gradient(105deg,var(--cyan) 0 16px,transparent 16px 28px);z-index:6;animation-name:story-filmstrip-mobile;}
 }
 @keyframes story-filmstrip-mobile{from{background-position-x:0;}to{background-position-x:-28.99px;}}
+/* Partners -> trustees on phones: same diagonal cut as desktop (navy wedge
+   rising to the right) with the film strip running just above it. */
+@media (max-width:900px){
+  .partners::before{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(4.72vw + 1px);background:var(--navy-deep);clip-path:polygon(100% 0,100% 100%,0 100%);z-index:1;pointer-events:none;}
+  .partners::after{left:0;right:auto;inset-inline:auto;width:106%;bottom:6px;height:14px;transform:rotate(-2.7deg);transform-origin:0 100%;background:repeating-linear-gradient(105deg,var(--cyan) 0 16px,transparent 16px 28px);opacity:1;z-index:2;animation:story-filmstrip-mobile 3s linear infinite reverse;}
+}
+@media (max-width:900px) and (prefers-reduced-motion:reduce){.partners::after{animation:none;}}
