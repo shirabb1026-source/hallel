@@ -64,6 +64,7 @@ get_header();
 			<div class="story__filmstrip" aria-hidden="true"></div>
 
 			<img class="story__wordmark" src="<?php echo esc_url( hallel_content_url( 'story_wordmark' ) ); ?>" alt="" aria-hidden="true">
+			<span class="story__wordmark-solid" aria-hidden="true"></span>
 			<span class="story__wordmark-fill" aria-hidden="true"></span>
 
 			<img class="story__accent" src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/images/story-accent.svg' . '?v=' . filemtime( get_stylesheet_directory() . '/assets/images/story-accent.svg' ) ); ?>" alt="">

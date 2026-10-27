@@ -62,14 +62,18 @@
     const rect = story.getBoundingClientRect();
     const distance = Math.max(1, story.offsetHeight - innerHeight);
     const progress = clamp(-rect.top / distance);
-    const fill = range(progress, .04, .28);
-    const wordOpacity = 1 - range(progress, .38, .56);
-    const copy = range(progress, .58, .78);
-    const props = range(progress, .85, .99);
+    // HALEL stays pinned: it fills with cyan, then settles into a light
+    // watermark while the copy scrolls up over it (linear = feels like scrolling).
+    const fill = range(progress, .02, .22);
+    const wordOpacity = 1 - range(progress, .24, .44);
+    const copy = clamp((progress - .2) / (.8 - .2));
+    const copyIn = clamp(copy * 3);
+    const props = range(progress, .82, .98);
 
     story.style.setProperty('--story-fill', fill.toFixed(4));
     story.style.setProperty('--story-word-opacity', wordOpacity.toFixed(4));
     story.style.setProperty('--story-copy', copy.toFixed(4));
+    story.style.setProperty('--story-copy-in', copyIn.toFixed(4));
     story.style.setProperty('--story-props', props.toFixed(4));
     animatedHeading?.classList.toggle('is-title-visible', copy > .02);
     ticking = false;
