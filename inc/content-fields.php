@@ -142,7 +142,21 @@ function hallel_content_value( $key ) {
 
 function hallel_content_url( $key ) {
 	$value = hallel_content_value( $key );
+	$value = preg_replace( '#^https?://assets/#i', 'assets/', $value );
 	return 0 === strpos( $value, 'assets/' ) ? get_stylesheet_directory_uri() . '/' . $value : $value;
+}
+
+function hallel_sanitize_media_value( $value ) {
+	$value = trim( (string) $value );
+	if ( '' === $value ) { return ''; }
+	// A relative theme asset path (e.g. "assets/images/x.jpg") has no scheme and
+	// doesn't start with a slash, so esc_url_raw() wrongly treats it like a bare
+	// domain and prepends "http://" to it. Keep safe relative paths as-is; only
+	// run real URLs (including uploaded media library URLs) through esc_url_raw().
+	if ( ! preg_match( '#^[a-z0-9.+-]+://#i', $value ) && preg_match( '#^[A-Za-z0-9/_.\-]+$#', $value ) ) {
+		return $value;
+	}
+	return esc_url_raw( $value );
 }
 
 function hallel_content_sanitize( $input ) {
@@ -156,7 +170,7 @@ function hallel_content_sanitize( $input ) {
 		foreach ( array_unique( $keys ) as $k ) {
 			if ( ! isset( $input[ $k ] ) ) { continue; }
 			$value = wp_unslash( $input[ $k ] );
-			$output[ $k ] = in_array( $type, array( 'url', 'media' ), true ) ? esc_url_raw( $value ) : wp_kses_post( $value );
+			$output[ $k ] = 'media' === $type ? hallel_sanitize_media_value( $value ) : ( 'url' === $type ? esc_url_raw( $value ) : wp_kses_post( $value ) );
 		}
 	}
 	return $output;
@@ -303,7 +317,7 @@ add_action( 'save_post_page', function( $post_id ) {
 	$input = wp_unslash( $_POST['hallel_home'] );
 	foreach ( hallel_home_groups() as $group ) foreach ( $group['fields'] as $key => $field ) {
 		$value = isset( $input[$key] ) ? $input[$key] : '';
-		$value = in_array( $field[1], array( 'url', 'media' ), true ) ? esc_url_raw( $value ) : wp_kses_post( $value );
+		$value = 'media' === $field[1] ? hallel_sanitize_media_value( $value ) : ( 'url' === $field[1] ? esc_url_raw( $value ) : wp_kses_post( $value ) );
 		update_post_meta( $post_id, '_hallel_' . $key, $value );
 	}
 } );

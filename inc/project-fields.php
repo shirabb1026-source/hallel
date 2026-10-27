@@ -73,6 +73,7 @@ function hallel_project_value( $post_id, $key ) {
 }
 function hallel_project_url( $post_id, $key ) {
 	$value = hallel_project_value( $post_id, $key );
+	$value = preg_replace( '#^https?://assets/#i', 'assets/', $value );
 	return 0 === strpos( $value, 'assets/' ) ? get_stylesheet_directory_uri() . '/' . $value : $value;
 }
 
@@ -95,7 +96,8 @@ add_action( 'save_post_hallel_project', function ( $post_id ) {
 	$input = wp_unslash( $_POST['hallel_project'] ); $values = array();
 	foreach ( hallel_project_schema() as $group ) { foreach ( $group['fields'] as $key => $field ) {
 		if ( ! isset( $input[ $key ] ) || ! is_scalar( $input[ $key ] ) ) { continue; }
-		if ( in_array( $field[1], array( 'url', 'media' ), true ) ) { $values[ $key ] = esc_url_raw( $input[ $key ] ); }
+		if ( 'media' === $field[1] ) { $values[ $key ] = hallel_sanitize_media_value( $input[ $key ] ); }
+		elseif ( 'url' === $field[1] ) { $values[ $key ] = esc_url_raw( $input[ $key ] ); }
 		elseif ( 'richtext' === $field[1] ) { $values[ $key ] = wp_kses_post( $input[ $key ] ); }
 		else { $values[ $key ] = sanitize_text_field( $input[ $key ] ); }
 	} }
