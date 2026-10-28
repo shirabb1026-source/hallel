@@ -3,7 +3,7 @@ Theme Name: Hallel
 Theme URI: https://hallel.local
 Author: Keren Hallel
 Description: ערכת עיצוב מותאמת אישית לקרן הלל, בהשראת מסמך העיצוב ב-Figma.
-Version: 0.5.0
+Version: 0.5.1
 Text Domain: hallel
 GitHub Theme URI: shirabb1026-source/hallel
 Primary Branch: main
@@ -2881,4 +2881,9 @@ body.hallel-inner-page .inner-closing>p{
 /* Partner logos a little smaller on phones. */
 @media (max-width:900px){
   .partners__logo-img{height:44px;max-width:min(30vw,128px);}
+}
+
+/* Trustees on phones: an odd last card (the 5th) sits centred under the 2-column grid. */
+@media (max-width:900px){
+  .testimonial-cards > .testimonial-card:last-child:nth-child(odd){grid-column:1 / -1;justify-self:center;width:calc(50% - 11px);}
 }
